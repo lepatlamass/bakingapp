@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Bakingapp</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="recipes">Recipes</string>
+    <string name="recipe_image_description">Recipe Image</string>
+    <string name="thumbnail_image">Thumbnail image</string>
+    <string name="video_not_available">Video not available</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="index_key">index</string>
+    <string name="player_position">Exo_player_position</string>
+    <string name="play_when_ready">play_when_ready</string>
+    <string name="no_network_message">Check you internet connection</string>
+    <string name="ingredients_and_steps">Ingredients and Steps</string>
+    <string name="step_description">Step Description</string>
+    <string name="error_interface" />
+    <string name="next_step">Next</string>
+    <string name="previous_step">Previous</string>
+    <string name="appwidget_text">Example</string>
+    <string name="add_widget">Add widget</string>
+</resources>
