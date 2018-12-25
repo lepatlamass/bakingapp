@@ -25,6 +25,7 @@ public class Recipe implements Parcelable {
     private int id;
     @SerializedName("name")
     private String name;
+
     @SerializedName("ingredients")
     private List<Ingredients> ingredients;
     @SerializedName("steps")
@@ -87,6 +88,11 @@ public class Recipe implements Parcelable {
 
     public List<Ingredients> getIngredients() {
         return ingredients;
+    }
+
+
+    public void setIngredients(List<Ingredients> ingredients) {
+        this.ingredients = ingredients;
     }
 
 

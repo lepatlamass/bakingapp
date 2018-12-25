@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import com.movieapp.konwo.sweetbaking.widgets.RecipeWidgetProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.test.espresso.IdlingResource;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -112,6 +114,7 @@ public class StepsListActivity extends AppCompatActivity
             mRecyclerView.setAdapter(mAdapter);
         }
     }
+
 
     private void closeOnError() {
         finish();
@@ -198,4 +201,5 @@ public class StepsListActivity extends AppCompatActivity
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
 }

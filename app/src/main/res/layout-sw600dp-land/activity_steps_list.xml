@@ -42,7 +42,7 @@
                     android:id="@+id/ingredient_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{ingredients.ingredients}"
+                    android:text="@{ingredient.ingredient}"
                     android:padding="12dp"
                     android:textAppearance="?attr/textAppearanceListItem" />
 

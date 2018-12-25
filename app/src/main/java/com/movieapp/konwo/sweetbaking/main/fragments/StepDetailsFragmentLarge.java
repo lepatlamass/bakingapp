@@ -62,7 +62,8 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
     private Context mContext;
     private Steps steps;
     private Recipe recipe;
-   // private Recipe mRecipe;
+    private Recipe mRecipe;
+   private List<Recipe> mRecipeList;
     private boolean isTablet;
     private String videoUrl;
     private SimpleExoPlayer mExoPlayer;
@@ -176,7 +177,7 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
                 new RecipesStepsAdapter(getContext(), objects, true, null)
         );
         rv.setHasFixedSize(true);
-        binding.setIngredients(recipe.getIngredients());
+     // binding.setIngredients();
         binding.setSteps(steps);
 
 
