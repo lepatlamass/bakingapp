@@ -6,11 +6,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.movieapp.konwo.sweetbaking.R;
 import com.movieapp.konwo.sweetbaking.main.fragments.RecipesFragment;
+import com.movieapp.konwo.sweetbaking.utilities.IdlingResourcesExpresso;
 
 import java.util.Objects;
 
+import androidx.test.espresso.IdlingResource;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -35,5 +38,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.recipe_fragment, fragment);
         transaction.commit();
+    }
+
+    @VisibleForTesting
+    public IdlingResource getCountingIdlingResource() {
+        return IdlingResourcesExpresso.getIdlingResource();
     }
 }

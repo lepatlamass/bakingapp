@@ -33,8 +33,11 @@ public class StepsListActivityTest {
     private static final int MIN_RECIPE_COUNT = 4;
 
     @Rule
-    public ActivityTestRule<StepsListActivity> mActivityRule =
-            new ActivityTestRule<>(StepsListActivity.class);
+    public ActivityTestRule<MainActivity> mActivityRule;
+
+    public StepsListActivityTest() {
+        mActivityRule = new ActivityTestRule<>(MainActivity.class);
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -45,7 +48,7 @@ public class StepsListActivityTest {
     @Test
     public void onLaunch_recipeListIsDisplayed() {
         // Check that the Recycler View is  displayed
-        onView(withId(R.id.activity_steps_list)).check(matches(isDisplayed()));
+        onView(withId(R.id.recipe_fragment)).check(matches(isDisplayed()));
     }
 
     @After
