@@ -51,6 +51,7 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
 
     private static final String EXTRA = "step" ;
     private static final String POSITION = "position";
+    private static final String RECETTE = "recipe";
     private static final String LOG_TAG = StepDetailsFragmentLarge.class.getSimpleName();
 
     PlayerView mPlayerView;
@@ -60,7 +61,8 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
 
     private Context mContext;
     private Steps steps;
-    private Recipe mRecipe;
+    private Recipe recipe;
+   // private Recipe mRecipe;
     private boolean isTablet;
     private String videoUrl;
     private SimpleExoPlayer mExoPlayer;
@@ -89,11 +91,12 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
 //        arg.putParcelable(EXTRA, null);
 //    }
 
-    public static StepDetailsFragmentLarge newInstance(Steps steps) {
+    public static StepDetailsFragmentLarge newInstance(Steps steps, Recipe recipe) {
         if(null == instance)
             instance = new StepDetailsFragmentLarge();
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA, steps);
+        bundle.putParcelable(RECETTE, recipe);
 
         instance.setArguments(bundle);
         return instance;
@@ -111,6 +114,7 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
 
         if (getArguments() != null) {
             steps = getArguments().getParcelable(EXTRA);
+            recipe = getArguments().getParcelable(RECETTE);
         }
         videoUrl = steps != null ? steps.getVideoURL() : null;
         if (savedInstanceState != null) {
@@ -172,7 +176,7 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
                 new RecipesStepsAdapter(getContext(), objects, true, null)
         );
         rv.setHasFixedSize(true);
-        binding.setIngredients();
+        binding.setIngredients(recipe.getIngredients());
         binding.setSteps(steps);
 
 

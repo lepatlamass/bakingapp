@@ -44,6 +44,8 @@ public class StepsListActivity extends AppCompatActivity
     private List<Steps> stepsList;
     private String mRecipeName;
 
+    private Recipe recipe;
+
     @BindView(R.id.step_list_rv)
     RecyclerView mRecyclerView;
     public ArrayList<Object> objects;
@@ -78,7 +80,7 @@ public class StepsListActivity extends AppCompatActivity
 
         assert intent != null;
         if (intent.hasExtra(INTENT_EXTRA)) {
-            Recipe recipe = getIntent().getParcelableExtra(INTENT_EXTRA);
+            recipe = getIntent().getParcelableExtra(INTENT_EXTRA);
             mRecipeId = recipe.getId();
             mRecipeName = recipe.getName();
             List<Ingredients> ingredients = recipe.getIngredients();
@@ -124,7 +126,7 @@ public class StepsListActivity extends AppCompatActivity
                 //Callbacks cb = (Callbacks)getSupportFragmentManager().getFragments().get(0);
                 //cb.callback(steps);
                 //videoLoading.createSteps(steps);
-                getSupportFragmentManager().beginTransaction().replace(R.id.detail_container, StepDetailsFragmentLarge.newInstance(steps)).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.detail_container, StepDetailsFragmentLarge.newInstance(steps, recipe)).commit();
             } else {
                 Intent intent = new Intent(this, StepsDetailsActivity.class);
                 intent.putExtra(StepsDetailsActivity.EXTRA, steps);
