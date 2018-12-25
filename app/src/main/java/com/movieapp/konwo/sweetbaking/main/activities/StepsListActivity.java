@@ -3,20 +3,26 @@ package com.movieapp.konwo.sweetbaking.main.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.movieapp.konwo.sweetbaking.R;
 import com.movieapp.konwo.sweetbaking.adapters.RecipesStepsAdapter;
 import com.movieapp.konwo.sweetbaking.main.fragments.StepDetailsFragment;
+import com.movieapp.konwo.sweetbaking.main.fragments.StepDetailsFragmentLarge;
 import com.movieapp.konwo.sweetbaking.models.Ingredients;
 import com.movieapp.konwo.sweetbaking.models.Recipe;
 import com.movieapp.konwo.sweetbaking.models.Steps;
+import com.movieapp.konwo.sweetbaking.utilities.Callbacks;
 import com.movieapp.konwo.sweetbaking.widgets.RecipeWidgetProvider;
 
 import java.util.ArrayList;
@@ -40,9 +46,16 @@ public class StepsListActivity extends AppCompatActivity
 
     @BindView(R.id.step_list_rv)
     RecyclerView mRecyclerView;
-    private ArrayList<Object> objects;
+    public ArrayList<Object> objects;
 
     private RecipesStepsAdapter mAdapter;
+    int stepIndex;
+
+    public StepDetailsFragment  videoLoading = new StepDetailsFragment();
+
+    public void setvideoloading(StepDetailsFragment detailsFragment){
+        videoLoading = detailsFragment;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +90,7 @@ public class StepsListActivity extends AppCompatActivity
         }
 
 
-        if (findViewById(R.id.step_detail_container) != null) {
+        if (findViewById(R.id.guideline) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
@@ -90,10 +103,12 @@ public class StepsListActivity extends AppCompatActivity
     }
 
     private void initViews() {
-        mAdapter = new RecipesStepsAdapter(this, objects, isTwoPane, this);
-        assert mRecyclerView != null;
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(mAdapter);
+        if(!isTwoPane){
+            mAdapter = new RecipesStepsAdapter(this, objects, isTwoPane, this);
+            assert mRecyclerView != null;
+            mRecyclerView.setHasFixedSize(true);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     private void closeOnError() {
@@ -105,10 +120,11 @@ public class StepsListActivity extends AppCompatActivity
     public void onStepClick(Steps steps) {
         if (steps != null) {
             if (isTwoPane) {
-                StepDetailsFragment fragment = new StepDetailsFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.step_detail_container, fragment)
-                        .commit();
+                Toast.makeText(this, "This is a click from the two pane view", Toast.LENGTH_SHORT).show();
+                //Callbacks cb = (Callbacks)getSupportFragmentManager().getFragments().get(0);
+                //cb.callback(steps);
+                //videoLoading.createSteps(steps);
+                getSupportFragmentManager().beginTransaction().replace(R.id.detail_container, StepDetailsFragmentLarge.newInstance(steps)).commit();
             } else {
                 Intent intent = new Intent(this, StepsDetailsActivity.class);
                 intent.putExtra(StepsDetailsActivity.EXTRA, steps);
@@ -150,11 +166,34 @@ public class StepsListActivity extends AppCompatActivity
 
     @Override
     public void onPreviousStepClick(Steps steps) {
-
+        stepIndex = steps.getId();
+        if (stepIndex > 0) {
+            showStep(stepsList.get(stepIndex - 1));
+        } else {
+            finish();
+        }
     }
 
     @Override
     public void onNextStepClick(Steps steps) {
+        stepIndex = steps.getId();
+        if (stepIndex < stepsList.size() - 1) {
+            showStep(stepsList.get(stepIndex + 1));
+        } else {
+            finish();
+        }
+    }
 
+    @Override
+    public void play(Steps steps) {
+        StepDetailsFragment.getInstance().createSteps(steps);
+    }
+
+    private void showStep(Steps steps) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        StepDetailsFragment fragment = StepDetailsFragment.newInstance(steps);
+        transaction.replace(R.id.step_detail_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

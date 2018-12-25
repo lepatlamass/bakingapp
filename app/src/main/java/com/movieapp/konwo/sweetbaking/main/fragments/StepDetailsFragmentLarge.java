@@ -2,8 +2,8 @@ package com.movieapp.konwo.sweetbaking.main.fragments;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +36,9 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.movieapp.konwo.sweetbaking.R;
+import com.movieapp.konwo.sweetbaking.adapters.RecipesStepsAdapter;
+import com.movieapp.konwo.sweetbaking.databinding.ActivityStepsDetailsBinding;
 import com.movieapp.konwo.sweetbaking.databinding.RecipesStepDetailsBinding;
-import com.movieapp.konwo.sweetbaking.main.activities.StepsDetailsActivity;
 import com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity;
 import com.movieapp.konwo.sweetbaking.models.Recipe;
 import com.movieapp.konwo.sweetbaking.models.Steps;
@@ -44,11 +47,11 @@ import com.movieapp.konwo.sweetbaking.utilities.Callbacks;
 import java.util.List;
 import java.util.Objects;
 
-public class StepDetailsFragment extends Fragment implements Player.EventListener, View.OnClickListener, Callbacks {
+public class StepDetailsFragmentLarge extends Fragment implements Player.EventListener, View.OnClickListener, Callbacks {
 
     private static final String EXTRA = "step" ;
     private static final String POSITION = "position";
-    private static final String LOG_TAG = StepDetailsFragment.class.getSimpleName();
+    private static final String LOG_TAG = StepDetailsFragmentLarge.class.getSimpleName();
 
     PlayerView mPlayerView;
     TextView stepDescription;
@@ -65,12 +68,14 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
     private boolean playWhenReady;
     private int scrennOrientation;
 
-    private static StepDetailsFragment instance  = null;
+    private List<Object> objects;
+
+    private static StepDetailsFragmentLarge instance  = null;
 
 
     private OnStepClickListener mListener;
 
-    public StepDetailsFragment(){
+    public StepDetailsFragmentLarge(){
 
     }
 
@@ -84,9 +89,9 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
 //        arg.putParcelable(EXTRA, null);
 //    }
 
-    public static StepDetailsFragment newInstance(Steps steps) {
+    public static StepDetailsFragmentLarge newInstance(Steps steps) {
         if(null == instance)
-            instance = new StepDetailsFragment();
+            instance = new StepDetailsFragmentLarge();
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA, steps);
 
@@ -119,12 +124,12 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
             else
                 Toast.makeText(getContext(), "The instance is empty", Toast.LENGTH_SHORT).show();
         }
-        instance = new StepDetailsFragment(); //this;
+        instance = new StepDetailsFragmentLarge(); //this;
     }
 
 
 
-    public static StepDetailsFragment getInstance(){
+    public static StepDetailsFragmentLarge getInstance(){
         return instance;
     }
 
@@ -152,6 +157,24 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
             Button previousStep = binding.btnPreviousStep;
             previousStep.setOnClickListener(this);
         }
+
+        // Load the objects from the activity
+        objects = ((StepsListActivity)getActivity()).objects;
+
+        Toast.makeText(getContext(), "Objects added!", Toast.LENGTH_SHORT).show();
+
+        // Load the recyclerview...
+        RecyclerView rv = binding.getRoot().findViewById(R.id.step_list_rv);
+        LinearLayoutManager ll = new LinearLayoutManager(getContext());
+        ll.setOrientation(LinearLayoutManager.VERTICAL);
+        rv.setLayoutManager(ll);
+        rv.setAdapter(
+                new RecipesStepsAdapter(getContext(), objects, true, null)
+        );
+        rv.setHasFixedSize(true);
+        binding.setIngredients();
+        binding.setSteps(steps);
+
 
 
         return binding.getRoot();

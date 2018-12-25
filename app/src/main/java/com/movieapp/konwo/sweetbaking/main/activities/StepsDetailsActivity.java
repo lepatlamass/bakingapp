@@ -57,7 +57,7 @@ public class StepsDetailsActivity extends AppCompatActivity implements StepDetai
     private void addFragment() {
         StepDetailsFragment fragment = StepDetailsFragment.newInstance(steps);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.step_detail_container, fragment)
+                .add(R.id.detail_container, fragment)
                 .commit();
     }
 
@@ -81,10 +81,15 @@ public class StepsDetailsActivity extends AppCompatActivity implements StepDetai
         }
     }
 
+    @Override
+    public void play(Steps steps) {
+
+    }
+
     private void showStep(Steps steps) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         StepDetailsFragment fragment = StepDetailsFragment.newInstance(steps);
-        transaction.replace(R.id.step_detail_container, fragment);
+        transaction.replace(R.id.detail_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
