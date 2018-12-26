@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -34,7 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StepsListActivity extends AppCompatActivity
-        implements RecipesStepsAdapter.StepsClickListener, StepDetailsFragment.OnStepClickListener {
+        implements RecipesStepsAdapter.StepsClickListener, StepDetailsFragment.OnStepClickListener, StepDetailsFragmentLarge.OnStepClickListener {
 
     public static final String INTENT_EXTRA = "recipe";
     public static final String WIDGET_PREF = "widget_prefs";
@@ -48,7 +49,7 @@ public class StepsListActivity extends AppCompatActivity
 
     private Recipe recipe;
 
-    @BindView(R.id.step_list_rv)
+   // @BindView(R.id.step_list_rv)
     RecyclerView mRecyclerView;
     public ArrayList<Object> objects;
 
@@ -56,6 +57,8 @@ public class StepsListActivity extends AppCompatActivity
     int stepIndex;
 
     public StepDetailsFragment  videoLoading = new StepDetailsFragment();
+    private Steps steps;
+    private StepDetailsFragmentLarge fragment;
 
     public void setvideoloading(StepDetailsFragment detailsFragment){
         videoLoading = detailsFragment;
@@ -108,10 +111,14 @@ public class StepsListActivity extends AppCompatActivity
 
     private void initViews() {
         if(!isTwoPane){
+            mRecyclerView = findViewById(R.id.step_list_rv);
             mAdapter = new RecipesStepsAdapter(this, objects, isTwoPane, this);
             assert mRecyclerView != null;
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setAdapter(mAdapter);
+        } else {
+            fragment = StepDetailsFragmentLarge.newInstance(stepsList.get(0), recipe);
+            getSupportFragmentManager().beginTransaction().replace(R.id.detail_container, fragment).commit();
         }
     }
 
@@ -195,11 +202,15 @@ public class StepsListActivity extends AppCompatActivity
     }
 
     private void showStep(Steps steps) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        StepDetailsFragment fragment = StepDetailsFragment.newInstance(steps);
-        transaction.replace(R.id.step_detail_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+       if (!isTwoPane) {
+           FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+           StepDetailsFragment fragment = StepDetailsFragment.newInstance(steps);
+           transaction.replace(R.id.step_detail_container, fragment);
+           transaction.addToBackStack(null);
+           transaction.commit();
+       } else {
+           fragment.createSteps(steps);
+       }
     }
 
 }

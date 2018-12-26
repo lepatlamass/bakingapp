@@ -7,6 +7,9 @@
         <variable
             name="steps"
             type="com.movieapp.konwo.sweetbaking.models.Steps"/>
+        <variable
+            name="ingredients"
+            type="com.movieapp.konwo.sweetbaking.models.Ingredients" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -111,6 +114,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exo_player_view" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/step_list_rv"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

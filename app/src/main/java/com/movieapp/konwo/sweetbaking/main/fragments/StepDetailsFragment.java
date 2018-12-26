@@ -145,7 +145,7 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
         // If screen is in landscape mode, show video in full screen
         // else show nav buttons and indicator
         if (scrennOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setFullScreenPlayer();
+           // setFullScreenPlayer();
         } else {
             Button nextStep = binding.btnNextStep;
             nextStep.setOnClickListener(this);

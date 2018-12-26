@@ -93,7 +93,7 @@ public class RecipesStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         void bind(Ingredients ingredients) {
-            ingredientsBinding.setIngredient(ingredients);
+            ingredientsBinding.setIngredients(ingredients);
             ingredientsBinding.executePendingBindings();
         }
     }

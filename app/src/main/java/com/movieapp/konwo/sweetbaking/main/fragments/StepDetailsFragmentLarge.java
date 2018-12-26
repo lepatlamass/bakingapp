@@ -38,6 +38,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.movieapp.konwo.sweetbaking.R;
 import com.movieapp.konwo.sweetbaking.adapters.RecipesStepsAdapter;
 import com.movieapp.konwo.sweetbaking.databinding.ActivityStepsDetailsBinding;
+import com.movieapp.konwo.sweetbaking.databinding.ActivityStepsListBackBinding;
 import com.movieapp.konwo.sweetbaking.databinding.RecipesStepDetailsBinding;
 import com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity;
 import com.movieapp.konwo.sweetbaking.models.Recipe;
@@ -46,6 +47,8 @@ import com.movieapp.konwo.sweetbaking.utilities.Callbacks;
 
 import java.util.List;
 import java.util.Objects;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class StepDetailsFragmentLarge extends Fragment implements Player.EventListener, View.OnClickListener, Callbacks {
 
@@ -78,6 +81,8 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
 
     private OnStepClickListener mListener;
 
+    private Steps currentSteps;
+
     public StepDetailsFragmentLarge(){
 
     }
@@ -93,6 +98,7 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
 //    }
 
     public static StepDetailsFragmentLarge newInstance(Steps steps, Recipe recipe) {
+
         if(null == instance)
             instance = new StepDetailsFragmentLarge();
         Bundle bundle = new Bundle();
@@ -100,6 +106,7 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
         bundle.putParcelable(RECETTE, recipe);
 
         instance.setArguments(bundle);
+        Log.e(TAG, "newInstance started ");
         return instance;
     }
 
@@ -112,6 +119,7 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Toast.makeText(getContext(), "starting on create 1 view", Toast.LENGTH_SHORT).show();
 
         if (getArguments() != null) {
             steps = getArguments().getParcelable(EXTRA);
@@ -141,10 +149,11 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        RecipesStepDetailsBinding binding =
-                RecipesStepDetailsBinding.inflate(inflater, container, false);
+        ActivityStepsListBackBinding binding =
+                DataBindingUtil.inflate(inflater,R.layout.activity_steps_list_back, container, false);
         binding.setSteps(steps);
-
+        binding.setIngredients(recipe.getIngredients().get(0));
+        Toast.makeText(getContext(), "starting on create view", Toast.LENGTH_SHORT).show();
         mContext = getActivity();
         mPlayerView = binding.exoPlayerView;
         videoThumbnail = binding.ivVideoThumbnail;
@@ -168,17 +177,24 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
 
         Toast.makeText(getContext(), "Objects added!", Toast.LENGTH_SHORT).show();
 
-        // Load the recyclerview...
-        RecyclerView rv = binding.getRoot().findViewById(R.id.step_list_rv);
+         //Load the recyclerview...
+       // RecyclerView rv =  getView().getRootView().findViewById(R.id.step_list_rv);
+              //  (RecyclerView) binding.stepListRv;
+
         LinearLayoutManager ll = new LinearLayoutManager(getContext());
+
         ll.setOrientation(LinearLayoutManager.VERTICAL);
-        rv.setLayoutManager(ll);
-        rv.setAdapter(
-                new RecipesStepsAdapter(getContext(), objects, true, null)
+        binding.stepListRv.setLayoutManager(ll);
+        RecipesStepsAdapter.StepsClickListener listener = (RecipesStepsAdapter.StepsClickListener) getActivity();
+       RecipesStepsAdapter stepsAdapter = new RecipesStepsAdapter(getContext(), objects, true, listener);
+        binding.stepListRv.setAdapter(
+                stepsAdapter
         );
-        rv.setHasFixedSize(true);
-     // binding.setIngredients();
-        binding.setSteps(steps);
+        stepsAdapter.notifyDataSetChanged();
+        binding.stepListRv.setHasFixedSize(true);
+
+
+        Toast.makeText(getContext(), "fragment toast", Toast.LENGTH_SHORT).show();
 
 
 

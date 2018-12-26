@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="ingredient"
+            name="ingredients"
             type="com.movieapp.konwo.sweetbaking.models.Ingredients" />
     </data>
         <LinearLayout
@@ -28,7 +28,7 @@
                 android:id="@+id/ingredient_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{ingredient.ingredient}"
+                android:text="@{ingredients.ingredient}"
                 android:padding="12dp"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
