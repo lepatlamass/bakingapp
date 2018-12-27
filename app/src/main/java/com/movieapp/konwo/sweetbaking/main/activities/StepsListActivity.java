@@ -41,6 +41,14 @@ public class StepsListActivity extends AppCompatActivity
     public static final String WIDGET_PREF = "widget_prefs";
     public static final String ID_PREF = "id";
     public static final String NAME_PREF = "name";
+    public static final String CRASH_REPORT = "report";
+
+    //steps variable
+    public static final String STEP_VIDEO = "video";
+    public static final String STEP_DESC = "desc";
+    public static final String STEP_ID = "stepid";
+    public static final String STEP_SHORTDESC = "shortdecs";
+    public static final String STEP_THUMBURL = "thumburl";
 
     private boolean isTwoPane;
     private int mRecipeId;
@@ -106,8 +114,9 @@ public class StepsListActivity extends AppCompatActivity
         }
 
         initViews();
-
     }
+
+
 
     private void initViews() {
         if(!isTwoPane){
@@ -132,7 +141,6 @@ public class StepsListActivity extends AppCompatActivity
     public void onStepClick(Steps steps) {
         if (steps != null) {
             if (isTwoPane) {
-                Toast.makeText(this, "This is a click from the two pane view", Toast.LENGTH_SHORT).show();
                 //Callbacks cb = (Callbacks)getSupportFragmentManager().getFragments().get(0);
                 //cb.callback(steps);
                 //videoLoading.createSteps(steps);
@@ -148,33 +156,33 @@ public class StepsListActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.add_widget_menu, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.add_widget_menu, menu);
+//        return true;
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_add_widget:
-                addToPrefsForWidget();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.menu_add_widget:
+//                addToPrefsForWidget();
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
-    private void addToPrefsForWidget() {
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(WIDGET_PREF, MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(ID_PREF, mRecipeId);
-        editor.putString(NAME_PREF, mRecipeName);
-        editor.apply();
-
-        // add selected recipe to widget
-        RecipeWidgetProvider.updateWidget(this);
-    }
+//    private void addToPrefsForWidget() {
+//        SharedPreferences preferences = getApplicationContext().getSharedPreferences(WIDGET_PREF, MODE_PRIVATE);
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putInt(ID_PREF, mRecipeId);
+//        editor.putString(NAME_PREF, mRecipeName);
+//        editor.apply();
+//
+//        // add selected recipe to widget
+//        RecipeWidgetProvider.updateAppWidget(this);
+//    }
 
     @Override
     public void onPreviousStepClick(Steps steps) {

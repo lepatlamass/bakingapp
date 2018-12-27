@@ -250,6 +250,7 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
     @Override
     public void onPause() {
         super.onPause();
+        playerPosition = mExoPlayer.getCurrentPosition();
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
@@ -266,6 +267,7 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
     public void onDestroyView() {
         super.onDestroyView();
         releasePlayer();
+        Toast.makeText(getContext(), "bye  bye", Toast.LENGTH_SHORT).show();
     }
 
     private void setFullScreenPlayer() {
@@ -283,14 +285,17 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
         } else if (playbackState == Player.STATE_READY) {
             Log.d(LOG_TAG, "Player is paused");
             Toast.makeText(getContext(), "player is pause", Toast.LENGTH_LONG).show();
+            playerPosition = mExoPlayer.getCurrentPosition();
+
         }
 
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putLong(POSITION, playerPosition);
         super.onSaveInstanceState(outState);
+            outState.putLong(POSITION, playerPosition);
+        Toast.makeText(getContext(), "saving fragment instance: " + playerPosition , Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -320,5 +325,11 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
         void onNextStepClick(Steps steps);
 
         void play(Steps steps);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
     }
 }

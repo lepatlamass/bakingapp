@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.movieapp.konwo.sweetbaking.R;
 import com.movieapp.konwo.sweetbaking.databinding.ActivityStepsDetailsBinding;
@@ -25,12 +26,14 @@ public class StepsDetailsActivity extends AppCompatActivity implements StepDetai
     private Steps steps;
     private List<Steps> stepsList;
     int stepIndex;
+    private ActivityStepsDetailsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityStepsDetailsBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_steps_details);
+       setContentView( R.layout.activity_steps_details);
+
+                //DataBindingUtil.setContentView(this, R.layout.activity_steps_details);
 
         //Toolbar toolbar = binding.detailListToolbar;
        // setSupportActionBar(toolbar);
@@ -92,5 +95,11 @@ public class StepsDetailsActivity extends AppCompatActivity implements StepDetai
         transaction.replace(R.id.detail_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

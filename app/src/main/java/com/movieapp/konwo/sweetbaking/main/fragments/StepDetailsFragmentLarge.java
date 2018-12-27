@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -73,7 +75,9 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
     private long playerPosition;
     private boolean playWhenReady;
     private int scrennOrientation;
-
+    private PlaybackStateCompat.Builder stateBuilder;
+    private MediaSource mediaSource;
+    private MediaSessionCompat mediaSession;
     private List<Object> objects;
 
     private static StepDetailsFragmentLarge instance  = null;
@@ -119,7 +123,6 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toast.makeText(getContext(), "starting on create 1 view", Toast.LENGTH_SHORT).show();
 
         if (getArguments() != null) {
             steps = getArguments().getParcelable(EXTRA);
@@ -128,14 +131,10 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
         videoUrl = steps != null ? steps.getVideoURL() : null;
         if (savedInstanceState != null) {
             playerPosition = savedInstanceState.getLong(POSITION);
+            Toast.makeText(getContext(), "starting from position " + playerPosition , Toast.LENGTH_SHORT).show();
         } else {
             playerPosition = 0;
-        }
-        if(getActivity() instanceof  StepsListActivity){
-            if(null != instance)
-                Toast.makeText(getContext(), "The instance is not empty", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(getContext(), "The instance is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Startin form zero", Toast.LENGTH_SHORT).show();
         }
         instance = new StepDetailsFragmentLarge(); //this;
     }
@@ -149,11 +148,12 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ActivityStepsListBackBinding binding =
-                DataBindingUtil.inflate(inflater,R.layout.activity_steps_list_back, container, false);
+        //Just check out what happens...
+        if (null == container) return null;
+        ActivityStepsListBackBinding binding = DataBindingUtil.inflate(inflater,R.layout.activity_steps_list_back, container, false);
+
         binding.setSteps(steps);
         binding.setIngredients(recipe.getIngredients().get(0));
-        Toast.makeText(getContext(), "starting on create view", Toast.LENGTH_SHORT).show();
         mContext = getActivity();
         mPlayerView = binding.exoPlayerView;
         videoThumbnail = binding.ivVideoThumbnail;
@@ -175,8 +175,6 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
         // Load the objects from the activity
         objects = ((StepsListActivity)getActivity()).objects;
 
-        Toast.makeText(getContext(), "Objects added!", Toast.LENGTH_SHORT).show();
-
          //Load the recyclerview...
        // RecyclerView rv =  getView().getRootView().findViewById(R.id.step_list_rv);
               //  (RecyclerView) binding.stepListRv;
@@ -193,13 +191,10 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
         stepsAdapter.notifyDataSetChanged();
         binding.stepListRv.setHasFixedSize(true);
 
-
-        Toast.makeText(getContext(), "fragment toast", Toast.LENGTH_SHORT).show();
-
-
-
         return binding.getRoot();
     }
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -219,6 +214,9 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
 //        Toast.makeText(getContext(), "init playing", Toast.LENGTH_LONG).show();
         // check if mExoPlayer is not null before init new
         if (mExoPlayer == null && !(videoUrl.isEmpty()) ) {
+
+            // Jump out if the player is null
+            if(null == mPlayerView) return;
             // show the player
             mPlayerView.setVisibility(View.VISIBLE);
             // default trackselector
@@ -324,17 +322,21 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
         if (playWhenReady && playbackState == Player.STATE_READY) {
             Log.d(LOG_TAG, "Player is playing");
             Toast.makeText(getContext(), "playing", Toast.LENGTH_LONG).show();
+//            stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, mExoPlayer.getCurrentPosition(), 1f);
         } else if (playbackState == Player.STATE_READY) {
             Log.d(LOG_TAG, "Player is paused");
             Toast.makeText(getContext(), "player is pause", Toast.LENGTH_LONG).show();
-        }
+           // stateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, mExoPlayer.getCurrentPosition(), 1f);
+            playerPosition = mExoPlayer.getCurrentPosition();
 
+        }
+//        mediaSession.setPlaybackState(stateBuilder.build());
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putLong(POSITION, playerPosition);
         super.onSaveInstanceState(outState);
+        outState.putLong(POSITION, playerPosition);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.movieapp.konwo.sweetbaking.main.activities;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -9,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import com.google.common.annotations.VisibleForTesting;
 import com.movieapp.konwo.sweetbaking.R;
 import com.movieapp.konwo.sweetbaking.main.fragments.RecipesFragment;
+import com.movieapp.konwo.sweetbaking.models.Steps;
 import com.movieapp.konwo.sweetbaking.utilities.IdlingResourcesExpresso;
 
 import java.util.Objects;
@@ -16,6 +19,14 @@ import java.util.Objects;
 import androidx.test.espresso.IdlingResource;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity.CRASH_REPORT;
+import static com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity.STEP_DESC;
+import static com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity.STEP_ID;
+import static com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity.STEP_SHORTDESC;
+import static com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity.STEP_THUMBURL;
+import static com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity.STEP_VIDEO;
+import static com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity.WIDGET_PREF;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.recipe_fragment, fragment);
         transaction.commit();
+
     }
 
     @VisibleForTesting

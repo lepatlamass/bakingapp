@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
+import com.movieapp.konwo.sweetbaking.BuildConfig;
 import com.movieapp.konwo.sweetbaking.R;
 import com.movieapp.konwo.sweetbaking.main.activities.MainActivity;
 import com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity;
@@ -25,37 +26,25 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(StepsListActivity.WIDGET_PREF, Context.MODE_PRIVATE);
-        int id = sharedPreferences.getInt(StepsListActivity.ID_PREF, 0);
-
-        text = sharedPreferences.getString(StepsListActivity.NAME_PREF, "no recipe");
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
-        views.setTextViewText(R.id.appwidget_text, text);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list);
 
-        //Set adapter
-        Intent intent = new Intent(context, WidgetService.class);
-        views.setRemoteAdapter(R.id.widget_list, intent);
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+        String recipeName= sharedPreferences.
+                getString(context.getString(R.string.pref_recipe_name),"");
 
-        //open mainActivity when title is clicked
-        Intent clickIntent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, clickIntent, 0);
-        views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent);
+        String formattedIngredients = sharedPreferences.
+                getString(context.getString(R.string.pref_recipe_ingredients),"");
+
+        views.setTextViewText(R.id.widget_recipe_name,recipeName);
+        views.setTextViewText(R.id.widget_recipe_ingredients,formattedIngredients );
 
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
     }
 
-    public static void updateWidget(Context context) {
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, RecipeWidgetProvider.class));
-        //Now update all widgets
-        for (int appWidgetId : appWidgetIds) {
-            RecipeWidgetProvider.updateAppWidget(context, appWidgetManager, appWidgetId);
-        }
-    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -70,10 +59,15 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
-        SharedPreferences sharedPreferences = context.getSharedPreferences(StepsListActivity.WIDGET_PREF, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(StepsListActivity.NAME_PREF);
-        editor.remove(StepsListActivity.ID_PREF);
-        editor.apply();
+    }
+
+    @Override
+    public void onEnabled(Context context) {
+
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+
     }
 }
