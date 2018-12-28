@@ -1,12 +1,9 @@
 package com.movieapp.konwo.sweetbaking.main.activities;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.movieapp.konwo.sweetbaking.R;
 import com.movieapp.konwo.sweetbaking.databinding.ActivityStepsDetailsBinding;
@@ -33,10 +30,6 @@ public class StepsDetailsActivity extends AppCompatActivity implements StepDetai
         super.onCreate(savedInstanceState);
        setContentView( R.layout.activity_steps_details);
 
-                //DataBindingUtil.setContentView(this, R.layout.activity_steps_details);
-
-        //Toolbar toolbar = binding.detailListToolbar;
-       // setSupportActionBar(toolbar);
 
         String mRecipeName = getIntent().getStringExtra(EXTRA_NAME);
         setTitle(mRecipeName);

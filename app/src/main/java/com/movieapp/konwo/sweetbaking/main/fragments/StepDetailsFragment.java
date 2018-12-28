@@ -2,7 +2,6 @@ package com.movieapp.konwo.sweetbaking.main.fragments;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
@@ -35,13 +34,11 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.movieapp.konwo.sweetbaking.R;
 import com.movieapp.konwo.sweetbaking.databinding.RecipesStepDetailsBinding;
-import com.movieapp.konwo.sweetbaking.main.activities.StepsDetailsActivity;
 import com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity;
 import com.movieapp.konwo.sweetbaking.models.Recipe;
 import com.movieapp.konwo.sweetbaking.models.Steps;
 import com.movieapp.konwo.sweetbaking.utilities.Callbacks;
 
-import java.util.List;
 import java.util.Objects;
 
 public class StepDetailsFragment extends Fragment implements Player.EventListener, View.OnClickListener, Callbacks {
@@ -73,16 +70,6 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
     public StepDetailsFragment(){
 
     }
-
-//    public StepDetailsFragment( Intent intent) {
-//        payloadIntent = intent;
-//    }
-
-//    public static StepDetailsFragment newInstance (Intent intent) {
-//        StepDetailsFragment fragment = new StepDetailsFragment();
-//        Bundle arg = new Bundle();
-//        arg.putParcelable(EXTRA, null);
-//    }
 
     public static StepDetailsFragment newInstance(Steps steps) {
         if(null == instance)
@@ -267,7 +254,7 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
     public void onDestroyView() {
         super.onDestroyView();
         releasePlayer();
-        Toast.makeText(getContext(), "bye  bye", Toast.LENGTH_SHORT).show();
+
     }
 
     private void setFullScreenPlayer() {
@@ -284,7 +271,6 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
             Toast.makeText(getContext(), "playing", Toast.LENGTH_LONG).show();
         } else if (playbackState == Player.STATE_READY) {
             Log.d(LOG_TAG, "Player is paused");
-            Toast.makeText(getContext(), "player is pause", Toast.LENGTH_LONG).show();
             playerPosition = mExoPlayer.getCurrentPosition();
 
         }
@@ -295,7 +281,6 @@ public class StepDetailsFragment extends Fragment implements Player.EventListene
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
             outState.putLong(POSITION, playerPosition);
-        Toast.makeText(getContext(), "saving fragment instance: " + playerPosition , Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -1,16 +1,10 @@
 package com.movieapp.konwo.sweetbaking.main.activities;
 
-import android.support.test.espresso.Espresso;
-import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
-import android.view.View;
-import android.widget.Toolbar;
 
 import com.movieapp.konwo.sweetbaking.R;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

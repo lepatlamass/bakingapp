@@ -1,21 +1,12 @@
 package com.movieapp.konwo.sweetbaking.main.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.movieapp.konwo.sweetbaking.R;
 import com.movieapp.konwo.sweetbaking.adapters.RecipesStepsAdapter;
@@ -24,14 +15,10 @@ import com.movieapp.konwo.sweetbaking.main.fragments.StepDetailsFragmentLarge;
 import com.movieapp.konwo.sweetbaking.models.Ingredients;
 import com.movieapp.konwo.sweetbaking.models.Recipe;
 import com.movieapp.konwo.sweetbaking.models.Steps;
-import com.movieapp.konwo.sweetbaking.utilities.Callbacks;
-import com.movieapp.konwo.sweetbaking.widgets.RecipeWidgetProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.test.espresso.IdlingResource;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StepsListActivity extends AppCompatActivity
@@ -43,12 +30,6 @@ public class StepsListActivity extends AppCompatActivity
     public static final String NAME_PREF = "name";
     public static final String CRASH_REPORT = "report";
 
-    //steps variable
-    public static final String STEP_VIDEO = "video";
-    public static final String STEP_DESC = "desc";
-    public static final String STEP_ID = "stepid";
-    public static final String STEP_SHORTDESC = "shortdecs";
-    public static final String STEP_THUMBURL = "thumburl";
 
     private boolean isTwoPane;
     private int mRecipeId;
@@ -64,13 +45,7 @@ public class StepsListActivity extends AppCompatActivity
     private RecipesStepsAdapter mAdapter;
     int stepIndex;
 
-    public StepDetailsFragment  videoLoading = new StepDetailsFragment();
-    private Steps steps;
     private StepDetailsFragmentLarge fragment;
-
-    public void setvideoloading(StepDetailsFragment detailsFragment){
-        videoLoading = detailsFragment;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,9 +116,6 @@ public class StepsListActivity extends AppCompatActivity
     public void onStepClick(Steps steps) {
         if (steps != null) {
             if (isTwoPane) {
-                //Callbacks cb = (Callbacks)getSupportFragmentManager().getFragments().get(0);
-                //cb.callback(steps);
-                //videoLoading.createSteps(steps);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_container, StepDetailsFragmentLarge.newInstance(steps, recipe)).commit();
             } else {
                 Intent intent = new Intent(this, StepsDetailsActivity.class);

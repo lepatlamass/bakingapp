@@ -10,11 +10,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,9 +36,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.movieapp.konwo.sweetbaking.R;
 import com.movieapp.konwo.sweetbaking.adapters.RecipesStepsAdapter;
-import com.movieapp.konwo.sweetbaking.databinding.ActivityStepsDetailsBinding;
 import com.movieapp.konwo.sweetbaking.databinding.ActivityStepsListBackBinding;
-import com.movieapp.konwo.sweetbaking.databinding.RecipesStepDetailsBinding;
 import com.movieapp.konwo.sweetbaking.main.activities.StepsListActivity;
 import com.movieapp.konwo.sweetbaking.models.Recipe;
 import com.movieapp.konwo.sweetbaking.models.Steps;
@@ -62,22 +57,15 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
     PlayerView mPlayerView;
     TextView stepDescription;
     ImageView videoThumbnail;
-    TextView noVideo;
 
     private Context mContext;
     private Steps steps;
     private Recipe recipe;
-    private Recipe mRecipe;
-   private List<Recipe> mRecipeList;
     private boolean isTablet;
     private String videoUrl;
     private SimpleExoPlayer mExoPlayer;
     private long playerPosition;
-    private boolean playWhenReady;
     private int scrennOrientation;
-    private PlaybackStateCompat.Builder stateBuilder;
-    private MediaSource mediaSource;
-    private MediaSessionCompat mediaSession;
     private List<Object> objects;
 
     private static StepDetailsFragmentLarge instance  = null;
@@ -85,21 +73,11 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
 
     private OnStepClickListener mListener;
 
-    private Steps currentSteps;
 
     public StepDetailsFragmentLarge(){
 
     }
 
-//    public StepDetailsFragment( Intent intent) {
-//        payloadIntent = intent;
-//    }
-
-//    public static StepDetailsFragment newInstance (Intent intent) {
-//        StepDetailsFragment fragment = new StepDetailsFragment();
-//        Bundle arg = new Bundle();
-//        arg.putParcelable(EXTRA, null);
-//    }
 
     public static StepDetailsFragmentLarge newInstance(Steps steps, Recipe recipe) {
 
@@ -131,19 +109,14 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
         videoUrl = steps != null ? steps.getVideoURL() : null;
         if (savedInstanceState != null) {
             playerPosition = savedInstanceState.getLong(POSITION);
-            Toast.makeText(getContext(), "starting from position " + playerPosition , Toast.LENGTH_SHORT).show();
         } else {
             playerPosition = 0;
-            Toast.makeText(getContext(), "Startin form zero", Toast.LENGTH_SHORT).show();
         }
         instance = new StepDetailsFragmentLarge(); //this;
     }
 
 
 
-    public static StepDetailsFragmentLarge getInstance(){
-        return instance;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -175,9 +148,6 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
         // Load the objects from the activity
         objects = ((StepsListActivity)getActivity()).objects;
 
-         //Load the recyclerview...
-       // RecyclerView rv =  getView().getRootView().findViewById(R.id.step_list_rv);
-              //  (RecyclerView) binding.stepListRv;
 
         LinearLayoutManager ll = new LinearLayoutManager(getContext());
 
@@ -211,7 +181,7 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
 
     // init exoPlayer
     private void initExoPlayer() {
-//        Toast.makeText(getContext(), "init playing", Toast.LENGTH_LONG).show();
+
         // check if mExoPlayer is not null before init new
         if (mExoPlayer == null && !(videoUrl.isEmpty()) ) {
 
@@ -321,12 +291,10 @@ public class StepDetailsFragmentLarge extends Fragment implements Player.EventLi
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         if (playWhenReady && playbackState == Player.STATE_READY) {
             Log.d(LOG_TAG, "Player is playing");
-            Toast.makeText(getContext(), "playing", Toast.LENGTH_LONG).show();
-//            stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, mExoPlayer.getCurrentPosition(), 1f);
+
         } else if (playbackState == Player.STATE_READY) {
             Log.d(LOG_TAG, "Player is paused");
-            Toast.makeText(getContext(), "player is pause", Toast.LENGTH_LONG).show();
-           // stateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, mExoPlayer.getCurrentPosition(), 1f);
+
             playerPosition = mExoPlayer.getCurrentPosition();
 
         }
